@@ -1,7 +1,12 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
-    kotlin("kapt")
+    kotlin("plugin.serialization") version "2.0.20"
+    alias(libs.plugins.compose.compiler)
+    id("com.google.devtools.ksp")
+
+
+
 }
 
 android {
@@ -73,7 +78,8 @@ dependencies {
     annotationProcessor("androidx.room:room-compiler:$room_version")
 
     // To use Kotlin annotation processing tool (kapt)
-    kapt("androidx.room:room-compiler:$room_version")
-
+    ksp("androidx.room:room-compiler:$room_version")
+    implementation("androidx.navigation:navigation-compose:2.8.0-rc01")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.1")
 
 }
