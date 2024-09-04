@@ -16,7 +16,7 @@ fun AppNavigation(dbObject: ContactDao) {
     NavHost(navController = navController, startDestination = ContactScreen) {
 
         composable<ContactScreen> {
-            MainScreen(dbObject, navController )
+            MainScreen(dbObject, navController)
         }
 
         composable<SaveEditScreen> {

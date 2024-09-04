@@ -27,6 +27,7 @@ import androidx.compose.material3.SwipeToDismissBoxState
 import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -35,57 +36,71 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.contactapp.data.dao.ContactDao
 import com.example.contactapp.presentation.navigation.SaveEditScreen
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 @Composable
 fun MainScreen(dbObject: ContactDao, navController: NavHostController) {
-        Scaffold(
-            modifier = Modifier.fillMaxSize(),
-            floatingActionButton = {
-                FloatingActionButton(
-                    onClick = { navController.navigate(SaveEditScreen) }) {
-                    Icon(imageVector = Icons.Rounded.Add, contentDescription = null)
-                }
-            }
-        ) { paddingValues ->
-            LazyColumn(
-                modifier = Modifier
-                    .background(Color.Black)
-                    .fillMaxSize()
-                    .padding(paddingValues)
-            ) {
-                items(dbObject.getAllContacts()) { contact ->
-                    Card(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(10.dp)
-                    ) {
-                        Row(
-                            modifier = Modifier
-                                .background(Color.Gray)
-                                .fillMaxSize(),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Column(modifier = Modifier.padding(start = 10.dp)) {
-                                Text(text = contact.name, color = Color.Black)
-                                Text(text = contact.email, color = Color.Black)
-                                Text(text = contact.number, color = Color.Black)
-                            }
-                            Column(
-                                modifier = Modifier.fillMaxHeight(),
-                                verticalArrangement = Arrangement.Center
-                            ) {
 
-                                IconButton(onClick = { dbObject.deleteContact(contact) }) {
-                                    Icon(imageVector = Icons.Rounded.Delete, contentDescription = null)
+    val coroutineScope = rememberCoroutineScope()
+
+    Scaffold(
+        modifier = Modifier.fillMaxSize(),
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = { navController.navigate(SaveEditScreen) }) {
+                Icon(imageVector = Icons.Rounded.Add, contentDescription = null)
+            }
+        }
+    ) { paddingValues ->
+        LazyColumn(
+            modifier = Modifier
+                .background(Color.Black)
+                .fillMaxSize()
+                .padding(paddingValues)
+        ) {
+            items(
+                dbObject.getAllContacts()
+            ) { contact ->
+                Card(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(10.dp)
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .background(Color.Gray)
+                            .fillMaxSize(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Column(modifier = Modifier.padding(start = 10.dp)) {
+                            Text(text = contact.name, color = Color.Black)
+                            Text(text = contact.email, color = Color.Black)
+                            Text(text = contact.number, color = Color.Black)
+                        }
+                        Column(
+                            modifier = Modifier.fillMaxHeight(),
+                            verticalArrangement = Arrangement.Center
+                        ) {
+
+                            IconButton(onClick = {
+                                coroutineScope.launch {
+                                    dbObject.deleteContact(contact)
                                 }
+                            }
+                            )
+                            {
+                                Icon(imageVector = Icons.Rounded.Delete, contentDescription = null)
                             }
                         }
                     }
-                    Spacer(modifier = Modifier.height(10.dp))
                 }
+                Spacer(modifier = Modifier.height(10.dp))
             }
         }
     }
+}
 
 

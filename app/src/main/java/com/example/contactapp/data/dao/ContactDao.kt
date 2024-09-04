@@ -10,14 +10,14 @@ import com.example.contactapp.data.tables.Contact
 interface ContactDao {
 
     @Upsert
-    fun saveEditContact(contact: Contact)
+    suspend fun saveEditContact(contact: Contact)
 
     @Delete
-    fun deleteContact(contact: Contact)
+    suspend fun deleteContact(contact: Contact)
 
     @Query("SELECT * FROM contact")
     fun getAllContacts():List<Contact>
 
     @Query("SELECT * FROM contact WHERE name LIKE '%' || :name || '%' AND number LIKE '%' || :number || '%' ")
-    fun isContactUnique(name: String, number: String): List<Contact>
+    suspend fun isContactUnique(name: String, number: String): List<Contact>
 }

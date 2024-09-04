@@ -16,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -27,11 +28,17 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.contactapp.data.dao.ContactDao
 import com.example.contactapp.data.tables.Contact
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
+@OptIn(DelicateCoroutinesApi::class)
 @Preview(showBackground = true)
 @Composable
 fun AddEditContactScreen(dbObject: ContactDao? = null, navController: NavHostController? = null) {
 
+    var customCoroutine = rememberCoroutineScope()
     var name by rememberSaveable {
         mutableStateOf("")
     }
@@ -83,6 +90,7 @@ fun AddEditContactScreen(dbObject: ContactDao? = null, navController: NavHostCon
         Button(onClick = {
 
             if (Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                customCoroutine.launch{
                 if (dbObject?.isContactUnique(name, number)?.size!! > 0) {
                     Toast.makeText(context, "This Contact already exists", Toast.LENGTH_SHORT)
                         .show()
@@ -95,6 +103,7 @@ fun AddEditContactScreen(dbObject: ContactDao? = null, navController: NavHostCon
                         )
                     )
                     navController?.navigateUp()
+                }
                 }
             } else {
                 Toast.makeText(context, "Invalid Email Address", Toast.LENGTH_SHORT).show()

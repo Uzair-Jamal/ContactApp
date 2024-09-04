@@ -11,9 +11,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import com.example.contactapp.ViewModel.MyViewModel
 import com.example.contactapp.data.DatabaseInstance
 import com.example.contactapp.presentation.navigation.AppNavigation
 import com.example.contactapp.ui.theme.ContactAppTheme
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -74,11 +74,17 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 
     val room_version = "2.6.1"
+    val lifecycle_version = "2.8.4"
+
     implementation("androidx.room:room-runtime:$room_version")
     annotationProcessor("androidx.room:room-compiler:$room_version")
-
+    // ViewModel utilities for Compose
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycle_version")
+    // LiveData
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version")
     // To use Kotlin annotation processing tool (kapt)
     ksp("androidx.room:room-compiler:$room_version")
+    implementation("androidx.room:room-ktx:$room_version")
     implementation("androidx.navigation:navigation-compose:2.8.0-rc01")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.1")
 
