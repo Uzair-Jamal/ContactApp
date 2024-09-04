@@ -35,6 +35,8 @@ class MyViewModel(val dbObject: ContactDao) : ViewModel() {
         }
     }
 
-
+    fun test(){
+        
+    }
 
 }
